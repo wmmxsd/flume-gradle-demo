@@ -1,0 +1,91 @@
+plugins {
+	id 'java-library'
+}
+
+group = 'com.wmm'
+version = '0.0.1-SNAPSHOT'
+
+//对所有子项目（模块）的共同配置
+subprojects {
+	//用于构建 Java 库项目
+	apply plugin: 'java-library'
+	//用于代码风格检查
+	apply plugin: 'checkstyle'
+
+	group 'com.wmm'
+	version '0.0.1-SNAPSHOT'
+
+	//配置了 Java 源代码和目标兼容性为 1.8
+	sourceCompatibility = JavaVersion.VERSION_1_8
+	targetCompatibility = JavaVersion.VERSION_1_8
+
+	//设置了 Checkstyle 工具版本为 8.24。
+	checkstyle {
+		toolVersion = '8.24'
+	}
+
+
+	configurations.all {
+		//配置了依赖项的解析策略，以便实时检查依赖更新
+		resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+
+		compileOnly {
+			extendsFrom annotationProcessor
+		}
+
+		//排除了特定依赖项，如 'org.sonatype.sisu.inject:cglib'
+		exclude group: 'org.sonatype.sisu.inject', module: 'cglib'
+		exclude group: 'org.apache.ant', module: 'ant'
+		exclude group: 'org.mortbay.jetty', module: 'servlet-api'
+	}
+
+	repositories {
+		mavenLocal()
+		maven { name "Alibaba"; url "https://maven.aliyun.com/repository/public" }
+		maven { name "Bstek"; url "https://nexus.bsdn.org/content/groups/public/" }
+		mavenCentral()
+	}
+
+	//配置了 Java 编译任务，设置了编码为 UTF-8。
+	tasks.withType(JavaCompile) {
+		options.encoding = "UTF-8"
+	}
+
+	//配置了项目的依赖关系，包括 Lombok 的引入和使用
+	dependencies {
+		compileOnly 'org.projectlombok:lombok'
+		annotationProcessor 'org.projectlombok:lombok'
+	}
+}
+
+/*
+run command: .\gradlew helloWorld
+* */
+task helloWorld() {
+    println("hello world")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+def cleanDist() {
+    println("clean dist directory")
+    delete "dist/test"
+}
+
+task cleanDist() {
+    cleanDist()
+}
+
+def copyWebBackend() {
+    println("copy web backend")
+    copy {
+        from("") {
+            include ""
+            rename ""
+        }
+        from ""
+        into "dist/test"
+    }
+}

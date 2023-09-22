@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(":flume-ng")
+    implementation project(":flume-security")
+}
