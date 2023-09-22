@@ -1,8 +1,8 @@
 rootProject.name = 'flume-gradle-demo'
 
-//include 'flume-base'
+include 'flume-base'
 include 'flume-ng'
-//include 'flume-security'
-//include 'flume-sources:flume-database-source'
-//include 'flume-core'
+include 'flume-security'
+include 'flume-sources:flume-database-source'
+include 'flume-core'
 

@@ -5,12 +5,16 @@ plugins {
 group = 'com.wmm'
 version = '0.0.1-SNAPSHOT'
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 //对所有子项目（模块）的共同配置
 subprojects {
 	//用于构建 Java 库项目
 	apply plugin: 'java-library'
-	//用于代码风格检查
-	apply plugin: 'checkstyle'
 
 	group 'com.wmm'
 	version '0.0.1-SNAPSHOT'
@@ -19,20 +23,9 @@ subprojects {
 	sourceCompatibility = JavaVersion.VERSION_1_8
 	targetCompatibility = JavaVersion.VERSION_1_8
 
-	//设置了 Checkstyle 工具版本为 8.24。
-	checkstyle {
-		toolVersion = '8.24'
-	}
-
-
 	configurations.all {
 		//配置了依赖项的解析策略，以便实时检查依赖更新
 		resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
-
-		compileOnly {
-			extendsFrom annotationProcessor
-		}
-
 		//排除了特定依赖项，如 'org.sonatype.sisu.inject:cglib'
 		exclude group: 'org.sonatype.sisu.inject', module: 'cglib'
 		exclude group: 'org.apache.ant', module: 'ant'
@@ -53,8 +46,8 @@ subprojects {
 
 	//配置了项目的依赖关系，包括 Lombok 的引入和使用
 	dependencies {
-		compileOnly 'org.projectlombok:lombok'
-		annotationProcessor 'org.projectlombok:lombok'
+		compileOnly "org.projectlombok:lombok:$LOMBOK_VERSION"
+//		annotationProcessor "org.projectlombok:$LOMBOK_VERSION"
 	}
 }
 
